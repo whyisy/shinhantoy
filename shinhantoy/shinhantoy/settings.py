@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'order.apps.OrderConfig'
+    'order.apps.OrderConfig',
+    'member.apps.MemberConfig',
 ]
 
 MIDDLEWARE = [
@@ -129,7 +130,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
 }
 
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("JWT",),
+}
+AUTH_USER_MODEL = "member.Member"
+AUTHENTICATION_BACKENDS = [
+    "member.auth.MemberAuth"
+]
