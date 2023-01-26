@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>상품 찐 상세 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            const search = new URLSearchParams(location.search);
+            const order_id = search.get('order_id')
+            if (order_id > 0) {
+                $.get("http://127.0.0.1:8000/api/order/" + order_id)
+                    .then((result) => {
+                        $("#ord_ymd").text(result.ord_ymd);
+                        $("#acct_mang_dbrn_code").text(result.acct_mang_dbrn_code);
+                        $("#ord_no").text(result.ord_no);
+                        $("#acct_no").text(result.acct_no);
+                        $("#callv_type_code").text(result.callv_type_code);
+                        $("#sell_buy_tp_code").text(result.sell_buy_tp_code);
+                        $("#stbd_code").text(result.stbd_code);
+                        $("#ord_qty").text(result.ord_qty);
+                        $("#ord_uv").text(result.ord_uv);
+                        $("#mrgn_base_uv").text(result.base_uv);
+                    });
+                $.get("http://127.0.0.1:8000/api/order/" + order_id + '/comment')
+                    .then((result) => {
+                        $("#comments").html("");
+
+                        for (let i = 0; i < result.results.length; i++) {
+                            const comment = result.results[i];
+
+                            $("#comments").append(
+                                $(`<li class="list-group-item">    <!--빽틱 쓰면 이거 자체를 넣겠다는 뜻 -->
+                                    ${comment.content}<br><br>
+                                    ${comment.member_username} (${comment.tstamp})
+                                    </li>`)
+                            );
+                        }
+                    });
+            }
+        });
+
+    </script>
+</head>
+
+<body>
+    <table class="table container">
+        <thead>
+            <tr>
+                <th scope="col">order_id</th>
+                <td id="order_id"></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">ord_ymd</th>
+                <td colspan="2" id="ord_ymd"></td>
+            </tr>
+            <tr>
+                <th scope="row">acct_mang_dbrn_code</th>
+                <td colspan="2" id="acct_mang_dbrn_code"></td>
+            </tr>
+            <tr>
+                <th scope="row">ord_no</th>
+                <td colspan="2" id="ord_no"></td>
+            </tr>
+            <tr>
+                <th scope="row">acct_no</th>
+                <td colspan="2" id="acct_no"></td>
+            </tr>
+            <tr>
+                <th scope="row">collav_type_code</th>
+                <td colspan="2" id="collav_type_code"></td>
+            </tr>
+            <tr>
+                <th scope="row">sell_buy_tp_code</th>
+                <td colspan="2" id="sell_buy_tp_code"></td>
+            </tr>
+            <tr>
+                <th scope="row">stbd_code</th>
+                <td colspan="2" id="stbd_code"></td>
+            </tr>
+            <tr>
+                <th scope="row">ord_qty</th>
+                <td colspan="2" id="ord_qty"></td>
+            </tr>
+            <tr>
+                <th scope="row">ord_uv</th>
+                <td colspan="2" id="ord_uv"></td>
+            </tr>
+            <tr>
+                <th scope="row">mrgn_base_uv</th>
+                <td colspan="2" id="mrgn_base_uv"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="container">
+        <h2>댓글창</h2>
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label for="inputId" class="col-form-label">ID</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" id="username" class="form-control" aria-describedby="passwordHelpInline">
+            </div>
+            <div class="col-auto">
+                <label for="inputPassword" class="col-form-label">Password</label>
+            </div>
+            <div class="col-auto">
+                <input type="password" id="password" class="form-control" aria-describedby="passwordHelpInline">
+            </div>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text" type="submit" onclick=submit()>입력</span>
+            <textarea class="form-control" aria-label="With textarea"></textarea>
+        </div>
+        <div id="token"></div>
+        <ul class="list-group list-group-flush" id="comments">
+            <li class="list-group-item">댓글 내용입니다.<br><br>양서정 (2023.01.25 14:21:21)</li>
+        </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
