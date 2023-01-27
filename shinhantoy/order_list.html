@@ -38,6 +38,17 @@
                         end_page = pages;
                     }
 
+                    for (let i=start_page; i<=end_page; i++) {
+                        let isActive = "";
+                        if (i == page) {
+                            isActive = " active";
+                        }
+                        $("#pagination").append(
+                            $(`<li class="page-item">
+                                <a class="page-link${isActive}" onclick="go_page(${i})">${i}</a>
+                            </li>`)
+                        );
+                    }
 
                     $("#comments").html("");
 
@@ -59,19 +70,9 @@
   <body>
     <div class="container">
         <ul class="list-group list-group-flush" id="comments">
-            <li class="list-group-item">댓글 내용입니다.<br><br>양서정 (2023.01.25 14:21:21)</li>
         </ul>
         <nav aria-label="Page navigation example">
             <ul class="pagination" id="pagination">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" onclick="go_page(1)">1</a></li>
-                        <li class="page-item"><a class="page-link" onclick="go_page(2)">2</a></li>
-                        <li class="page-item"><a class="page-link" onclick="go_page(3)">3</a></li>
-                        <li class="page-item"><a class="page-link" onclick="go_page(4)">4</a></li>
-                        <li class="page-item"><a class="page-link" onclick="go_page(5)">5</a></li>
-                    </ul>
-                </nav>
             </ul>
         </nav>
     </div>
