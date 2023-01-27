@@ -18,12 +18,11 @@
             page = 1;
         }
 
-        // page = Number(page);
-        // Total = page.count
-        // Total_page = Math.ceil(Total_page / 10)
-        // start_page = last_page -(page-1)
-        // last_page = start_page * page
+        page = Number(page);
 
+        function go_page(p) {
+            window.location.href = "?order_id=" + order_id +"&page=" + p;
+        }
 
         function create() {
             $.ajax({
@@ -74,14 +73,40 @@
                         for (let i = 0; i < keys.length; i++) {
                             let key = keys[i];
                             $("#info").append(
-                                $(`<ul>${key}:${result[key]}</ul>`)
+                                $(`<li>${key}:${result[key]}</li>`)
                             );
                         }
                     });
 
-                $.get("http://127.0.0.1:8000/api/order/" + order_id + '/comment?page=' + page)
+                $.get("http://127.0.0.1:8000/api/order/" + order_id + '/comment')
                     .then((result) => {
+                        const total = result.count;
+                        const pages = Math.ceil(total / 10);
+                        
+                        let start_page = page - 2;
+                        let end_page = page + 2;
+
+                        if (start_page < 1) {
+                            start_page = 1;
+                        }
+
+                        if (end_page > pages) {
+                            end_page = pages;
+                        }
+
+                        for (let i=start_page; i<=end_page; i++) {
+                            let isActive = "";
+                            if (i == page) {
+                                isActive = " active";
+                            }
+                            $("#pagination").append(
+                                $(`<li class="page-item">
+                                    <a class="page-link${isActive}" onclick="go_page(${i})">${i}</a>
+                                </li>`)
+                            );
+                        }
                         $("#comments").html("");
+
 
                         for (let i = 0; i < result.results.length; i++) {
                             const comment = result.results[i];
@@ -98,20 +123,10 @@
                                     </li>`)
                             );
                         }
-                        for (let i = startpage; i <= endpage; i++) {
-                            startp
-                        }
+
                     });
             }
         });
-
-        function go_page(page) {
-            const search = new URLSearchParams(location.search);
-            const product_id = search.get('order_id');
-
-            window.location.href = `?order_id=${order_id}&page=${page}`;
-        }
-
 
     </script>
 </head>
@@ -135,12 +150,7 @@
 
 
         <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" onclick="go_page(1)">1</a></li>
-                <li class="page-item"><a class="page-link" onclick="go_page(2)">2</a></li>
-                <li class="page-item"><a class="page-link" onclick="go_page(3)">3</a></li>
-                <li class="page-item"><a class="page-link" onclick="go_page(4)">4</a></li>
-                <li class="page-item"><a class="page-link" onclick="go_page(5)">5</a></li>
+            <ul class="pagination" id="pagination"></ul>
             </ul>
         </nav>
     </div>
