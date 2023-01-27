@@ -24,6 +24,19 @@
         $(document).ready(function () {
             $.get("http://127.0.0.1:8000/api/order?page=" + page)
                 .then((result) => {
+                    const total = result.count;
+                    const pages = Math.ceil(total / 10);
+                    
+                    let start_page = page - 2;
+                    let end_page = page + 2;
+
+                    if (start_page < 1) {
+                        start_page = 1;
+                    }
+
+                    if (end_page > pages) {
+                        end_page = pages;
+                    }
 
 
                     $("#comments").html("");
